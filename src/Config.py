@@ -20,7 +20,7 @@
 # MA  02110-1301, USA.                                              #
 #####################################################################
 
-from ConfigParser import ConfigParser
+import configparser
 import Log
 import Resource
 import os
@@ -74,7 +74,7 @@ class Config:
     self.prototype = prototype
 
     # read configuration
-    self.config = ConfigParser()
+    self.config = configparser.ConfigParser()
 
     if fileName:
       if not os.path.isfile(fileName):

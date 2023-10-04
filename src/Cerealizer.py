@@ -128,13 +128,18 @@ import logging
 logger = logging.getLogger("cerealizer")
 #logging.basicConfig(level=logging.INFO)
 
-from cStringIO import StringIO
-from new       import instance
+#from cStringIO import StringIO
+#from new       import instance
 
-class NotCerealizerFileError(StandardError): pass
-class NonCerealizableObjectError(StandardError): pass
+class NotCerealizerFileError(BaseException): pass
+class NonCerealizableObjectError(BaseException): pass
 
-def _priority_sorter(a, b): return cmp(a[0], b[0])
+#def _priority_sorter(a, b): return cmp(a[0], b[0])
+def _priority_sorter(a, b):
+  if a[0] < b[0]: return -1
+  if a[0] > b[0]: return 1
+  return 0
+  #return cmp(a[0], b[0])
 
 class Dumper(object):
   def dump(self, root_obj, s):
@@ -510,9 +515,9 @@ but you may choose something shorter -- as long as there is no risk of name clas
     elif hasattr(Class, "__getinitargs__"): handler = InitArgsObjHandler(Class, classname)
     elif hasattr(Class, "__slots__"      ): handler = SlotedObjHandler  (Class, classname)
     else:                                   handler = ObjHandler        (Class, classname)
-  if _HANDLERS_.has_key(Class): raise ValueError("Class %s has already been registred!" % Class)
+  if Class in _HANDLERS_: raise ValueError("Class %s has already been registred!" % Class)
   if not isinstance(handler, RefHandler):
-    if _HANDLERS .has_key(handler.classname): raise ValueError("A class has already been registred under the name %s!" % handler.classname[:-1])
+    if handler.classname in _HANDLERS: raise ValueError("A class has already been registred under the name %s!" % handler.classname[:-1])
     _HANDLERS [handler.classname] = handler
     if handler.__class__ is ObjHandler:
       logger.info("Registring class %s as '%s'" % (Class, handler.classname[:-1]))
@@ -557,10 +562,10 @@ unexpected calls to register()."""
   
 register(type(None), NoneHandler     ())
 register(str       , StrHandler      ())
-register(unicode   , UnicodeHandler  ())
+#register(unicode   , UnicodeHandler  ())
 register(bool      , BoolHandler     ())
 register(int       , IntHandler      ())
-register(long      , LongHandler     ())
+#register(long      , LongHandler     ())
 register(float     , FloatHandler    ())
 register(complex   , ComplexHandler  ())
 register(dict      , DictHandler     ())
@@ -608,5 +613,5 @@ Utility function; for each classes found in the given module, print the needed c
   s = set([c for module in modules for c in module.__dict__.values() if isinstance(c, type(D)) or  isinstance(c, type(O))])
   l = ['cerealizer.register(%s.%s)' % (c.__module__, c.__name__) for c in s]
   l.sort()
-  for i in l: print i
+  for i in l: print(i)
   

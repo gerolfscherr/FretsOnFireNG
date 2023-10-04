@@ -2,12 +2,12 @@
 
 # standard library imports
 import sys
-from types import StringType
+#from types import StringType
 from struct import unpack
-from cStringIO import StringIO
+from io import StringIO
 
 # custom import
-from DataTypeConverters import writeBew, writeVar, fromBytes
+from .DataTypeConverters import writeBew, writeVar, fromBytes
 
 class RawOutstreamFile:
     
@@ -43,7 +43,7 @@ class RawOutstreamFile:
     def write(self):
         "Writes to disc"
         if self.outfile:
-            if isinstance(self.outfile, StringType):
+            if isinstance(self.outfile, str):
                 outfile = open(self.outfile, 'wb')
                 outfile.write(self.getvalue())
                 outfile.close()

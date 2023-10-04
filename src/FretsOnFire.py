@@ -59,7 +59,7 @@ if __name__ == "__main__":
   try:
     opts, args = getopt.getopt(sys.argv[1:], "vp:", ["verbose", "play="])
   except getopt.GetoptError:
-    print usage
+    print(usage)
     sys.exit(1)
 
   songName = None

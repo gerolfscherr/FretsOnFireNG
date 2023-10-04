@@ -720,7 +720,7 @@ class GHImporter(Layer):
       for songName, data in songMap.items():
         library, fullName, artist = data
         songPath = self.engine.resource.fileName(library, songName, writable = True)
-        print songPath
+        print(songPath)
 
         Log.notice("Extracting song '%s'" % songName)
         self.statusText = _("Extracting %s by %s. %d of %d songs imported. Yeah, this is going to take forever.") % (fullName, artist, len(songs), len(songMap))

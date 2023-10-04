@@ -23,7 +23,7 @@
 import Network
 import Engine
 import Log
-import cPickle as pickle
+import pickle
 
 from Session import ServerSession, MessageBroker
 from World import WorldServer

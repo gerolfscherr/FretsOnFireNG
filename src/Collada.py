@@ -62,7 +62,7 @@ def ToFloat2(stringValue, errorText=''):
 	try:
 		return [ float( split[ 0 ] ), float( split[ 1 ] )]
 	except IndexError:
-		print 'Error: ' + errorText
+		print('Error: ' + errorText)
 		raise
 
 def ToList(var):

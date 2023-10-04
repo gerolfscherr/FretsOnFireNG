@@ -19,7 +19,7 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,        #
 # MA  02110-1301, USA.                                              #
 #####################################################################
-
+import io
 import re
 import os
 from xml import sax
@@ -539,7 +539,8 @@ class SvgDrawing:
     self.transform = SvgTransform()
 
     # Detect the type of data passed in
-    if type(svgData) == file:
+    #if type(svgData) == file:
+    if isinstance(svgData, io.IOBase):
       self.svgData = svgData.read()
     elif type(svgData) == str:
       bitmapFile = svgData.replace(".svg", ".png")

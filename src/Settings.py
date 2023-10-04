@@ -41,7 +41,8 @@ class ConfigChoice(Menu.Choice):
     v = config.get(section, option)
     if isinstance(o.options, dict):
       values     = o.options.values()
-      values.sort()
+      #values.sort()
+      values = sorted(values)
       try:
         valueIndex = values.index(o.options[v])
       except KeyError:

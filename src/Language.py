@@ -45,7 +45,7 @@ if language:
     def translate(m):
       return catalog.gettext(m).decode("utf-8")
     _ = translate
-  except Exception, x:
+  except Exception as x:
     Log.warn("Unable to select language '%s': %s" % (language, x))
     language = None
 

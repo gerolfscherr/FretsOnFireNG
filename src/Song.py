@@ -23,12 +23,12 @@
 import midi
 import Log
 import Audio
-from ConfigParser import ConfigParser
+import configparser
 import os
 import re
 import shutil
 import Config
-import sha
+#import sha
 import binascii
 import Cerealizer
 import urllib
@@ -195,7 +195,7 @@ class SongInfo(object):
       else:
         fields = [data, "0"]
       return (fields[0] == "True", int(fields[1]))
-    except Exception, e:
+    except Exception as e:
       Log.error(e)
       return (False, 0)
   
@@ -458,13 +458,13 @@ class Song(object):
     try:
       if guitarTrackName:
         self.guitarTrack = Audio.StreamingSound(self.engine, self.engine.audio.getChannel(1), guitarTrackName)
-    except Exception, e:
+    except Exception as e:
       Log.warn("Unable to load guitar track: %s" % e)
 
     try:
       if rhythmTrackName:
         self.rhythmTrack = Audio.StreamingSound(self.engine, self.engine.audio.getChannel(2), rhythmTrackName)
-    except Exception, e:
+    except Exception as e:
       Log.warn("Unable to load rhythm track: %s" % e)
 	
     # load the notes

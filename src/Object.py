@@ -21,7 +21,7 @@
 #####################################################################
 
 import pickle
-from StringIO import StringIO
+from io import StringIO
 
 class Serializer(pickle.Pickler):
   def persistent_id(self, obj):
@@ -117,8 +117,8 @@ class Manager:
           id = data
           del self.__creationData[id]
           del self.objects[id]
-      except Exception, e:
-        print "Exception %s while processing incoming changes from manager %s." % (str(e), managerId)
+      except Exception as e:
+        print( "Exception %s while processing incoming changes from manager %s." % (str(e), managerId))
         raise
 
 def enableGlobalManager():

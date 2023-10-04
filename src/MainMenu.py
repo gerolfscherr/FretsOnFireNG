@@ -105,11 +105,11 @@ class MainMenu(BackgroundLayer):
           import traceback
           traceback.print_exc()
           raise
-      except socket.error, e:
+      except socket.error as e:
         Dialogs.showMessage(self.engine, unicode(e[1]))
       except KeyboardInterrupt:
         pass
-      except Exception, e:
+      except Exception as e:
         if e:
           Dialogs.showMessage(self.engine, unicode(e))
     return harness

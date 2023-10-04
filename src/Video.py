@@ -59,7 +59,7 @@ class Video:
 
     try:
       self.screen = pygame.display.set_mode(resolution, flags)
-    except Exception, e:
+    except Exception as e:
       Log.error(str(e))
       if multisamples:
         Log.warn("Video setup failed. Trying without antialiasing.")

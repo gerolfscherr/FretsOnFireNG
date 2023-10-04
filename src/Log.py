@@ -47,10 +47,12 @@ else:
   }
 
 def log(cls, msg):
-  msg = unicode(msg).encode(encoding, "ignore")
+  #msg = unicode(msg).encode(encoding, "ignore")
+  msg = msg.encode(encoding, 'ignore')
   if not quiet:
-    print labels[cls] + " " + msg
-  print >>logFile, labels[cls] + " " + msg
+    print(labels[cls] + " " + msg)
+  #print >>logFile, labels[cls] + " " + msg
+  logFile.write(labels[cls] + " " + str(msg))
 
 warn   = lambda msg: log("warn", msg)
 debug  = lambda msg: log("debug", msg)

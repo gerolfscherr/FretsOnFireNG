@@ -357,7 +357,7 @@ class GameEngine(Engine):
       sys.exit(0)
     except SystemExit:
       sys.exit(0)
-    except Exception, e:
+    except Exception as e:
       def clearMatrixStack(stack):
         try:
           glMatrixMode(stack)

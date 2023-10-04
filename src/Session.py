@@ -21,7 +21,7 @@
 #####################################################################
 
 import pickle
-from StringIO import StringIO
+#from StringIO import StringIO
 
 import Network
 import Engine
@@ -64,7 +64,7 @@ class MessageBroker:
     for handler in reversed(self.messageHandlers):
       try:
         handler.handleMessage(sender, message)
-      except Exception, e:
+      except Exception as e:
         import traceback
         traceback.print_exc()
 
