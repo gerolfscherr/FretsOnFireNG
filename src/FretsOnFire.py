@@ -42,6 +42,8 @@ codecs.register(lambda encoding: encodings.utf_8.getregentry())
 assert codecs.lookup("iso-8859-1")
 assert codecs.lookup("utf-8")
 
+
+
 from GameEngine import GameEngine
 from MainMenu import MainMenu
 import Log

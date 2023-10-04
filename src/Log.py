@@ -22,9 +22,11 @@
 
 import sys
 import os
+import threading
+
 import Resource
 
-quiet = True
+quiet = False
 logFile = open(os.path.join(Resource.getWritableResourcePath(), "fretsonfire.log"), "w")
 encoding = "iso-8859-1"
 
@@ -50,7 +52,7 @@ def log(cls, msg):
   #msg = unicode(msg).encode(encoding, "ignore")
   msg = msg.encode(encoding, 'ignore')
   if not quiet:
-    print(labels[cls] + " " + msg)
+    print(str(threading.get_ident()) + ":" +   labels[cls] + " " + str(msg))
   #print >>logFile, labels[cls] + " " + msg
   logFile.write(labels[cls] + " " + str(msg))
 

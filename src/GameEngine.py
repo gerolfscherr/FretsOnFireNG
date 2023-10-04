@@ -145,7 +145,7 @@ class GameEngine(Engine):
     bufferSize   = self.config.get("audio", "buffersize")
     
     self.audio.pre_open(frequency = frequency, bits = bits, stereo = stereo, bufferSize = bufferSize)
-    pygame.init()
+## doppelt?    pygame.init()
     self.audio.open(frequency = frequency, bits = bits, stereo = stereo, bufferSize = bufferSize)
 
     Log.debug("Initializing video.")
