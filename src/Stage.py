@@ -20,7 +20,7 @@
 # MA  02110-1301, USA.                                              #
 #####################################################################
 
-from ConfigParser import ConfigParser
+from configparser import ConfigParser
 from OpenGL.GL import *
 import math
 import Log

@@ -27,7 +27,7 @@ class RawOutstreamFile:
 
     def writeSlice(self, str_slice):
         "Writes the next text slice to the raw data"
-        self.buffer.write(str_slice)
+        self.buffer.write(str(str_slice))
         
         
     def writeBew(self, value, length=1):

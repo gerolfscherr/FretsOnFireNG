@@ -95,17 +95,21 @@ def readVar(value):
     >>> readVar('стуa')
     205042145
     """
+    #if not isinstance(value, bytes)
+    if isinstance(value, str):
+        value = value.encode()
     sum = 0
-    for byte in unpack('%sB' % len(value), value):
-        sum = (sum << 7) + (byte & 0x7F)
-        if not 0x80 & byte: break # stop after last byte
+    v = unpack('%sB' % len(value), value)
+    for b in v:
+        sum = (sum << 7) + (b & 0x7F)
+        if not 0x80 & b: break # stop after last byte
     return sum
 
 
 
 def varLen(value):
     """
-    Returns the the number of bytes an integer will be when
+    Returns the number of bytes an integer will be when
     converted to varlength
     """
     if value <= 127:

@@ -28,6 +28,9 @@ import Engine
 import Log
 import World
 import Task
+import io
+
+import json
 
 try:
   reversed
@@ -80,7 +83,9 @@ class MessageHandler:
   def handleMessage(self, sender, message):
     f = None
     try:
-      n = "handle" + str(message.__class__).split(".")[-1]
+      # this is braindead - they use the textual representation
+      # which changed between python 2 and 3, so I have to remove the trailing '> in order for this to work
+      n = "handle" + str(message.__class__).split(".")[-1].replace("'>","")
       f = getattr(self, n)
     except AttributeError:
       return None
@@ -98,7 +103,11 @@ class Phrasebook:
     self.sentClasses = {}
 
   def serialize(data):
-    s = StringIO()
+    #s = json.dumps(data)  // [-1, <class 'World.CreatePlayer'>, ['name']] das kannst halt nicht serialisieren :-/
+    #return s.encode()
+
+    #s =io.StringIO()
+    s = io.BytesIO()
     pickle.Pickler(s, protocol = 2).dump(data)
     return s.getvalue()
   serialize = staticmethod(serialize)
@@ -126,7 +135,7 @@ class Phrasebook:
     
     if not message.__class__ in self.sentClasses:
       id = len(self.sentClasses) + 1
-      definition = [message.__class__, message.__dict__.keys()]
+      definition = [message.__class__, list(message.__dict__.keys())]  #gerolf// list()
       self.sentClasses[message.__class__] = [id] + definition
       packets.append(self.serialize([-id] + definition))
       Log.debug("%d phrases taught." % len(self.sentClasses))
@@ -160,13 +169,13 @@ class BaseSession(Network.Connection, Task.Task, MessageHandler):
     return self.engine.disconnect(self)
 
   def sendMessage(self, message):
-    #print "Sent by %s:%s: %s" % (self.__class__, self.id, message)
+    Log.debug("Sent by %s:%s: %s" % (self.__class__, self.id, message))
     #self.sendPacket(message.serialize())
     for packet in self.phrasebook.encode(message):
       self.sendPacket(packet)
 
   def handleMessage(self, sender, message):
-    #print "Received by %s:%s: %s" % (self.__class__, self.id, message)
+    Log.debug("Received by %s:%s: %s" % (self.__class__, self.id, message))
     self.broker.signalMessage(sender, message)
 
   def handleRegistration(self):

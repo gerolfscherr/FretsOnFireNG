@@ -512,7 +512,7 @@ class SongChooser(Layer, KeyListener):
     if self.songLoader:
       self.songLoader.cancel()
       # Don't start a new song loader until the previous one is finished
-      if self.songLoader.isAlive():
+      if self.songLoader.is_alive():
         self.songCountdown = 256
         return
 
@@ -848,7 +848,10 @@ class ItemChooser(BackgroundLayer, KeyListener):
     self.time           = 0.0
     self.menu = Menu(self.engine, choices = [(c, self._callbackForItem(c)) for c in items], onClose = self.close, onCancel = self.cancel)
     if selected and selected in items:
-      self.menu.selectItem(items.index(selected))
+      #items.index(selected)
+      i = list(items).index(selected)
+      self.menu.selectItem(i)
+
     self.engine.loadSvgDrawing(self, "background", "editor.svg")
     
   def _callbackForItem(self, item):

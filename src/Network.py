@@ -24,6 +24,7 @@ import asyncore
 import socket
 import struct
 import time
+import io
 from io import StringIO
 
 import Log
@@ -70,7 +71,7 @@ class Connection(asyncore.dispatcher):
     self._buffer = []
     self._sentSizeField = False
     self._receivedSizeField = 0
-    self._packet = StringIO.StringIO()
+    self._packet = io.BytesIO()
 
     if not sock:
       self.create_socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -159,7 +160,8 @@ class Connection(asyncore.dispatcher):
     try:
       data = self._buffer[0]
       if not self._sentSizeField:
-        self.send(struct.pack("H", len(data)))
+        sf = struct.pack("H", len(data))
+        self.send(sf)
         self._sentSizeField = True
       sent = self.send(data)
       data = data[sent:]

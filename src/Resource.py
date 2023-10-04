@@ -67,9 +67,13 @@ class Loader(Thread):
       start = time.time()
       self.result = self.function()
       self.time = time.time() - start
-    except:
+    except Exception as e:
+      import traceback
+      traceback.print_exc()
+      Log.error(str(e))
       import sys
       self.exception = sys.exc_info()
+
 
   def finish(self):
     if self.canceled:

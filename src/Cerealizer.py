@@ -4,6 +4,9 @@
 # This program is free software.
 # It is available under the Python licence.
 
+from io import StringIO
+from functools import cmp_to_key
+
 try:
   set
 except:
@@ -151,7 +154,7 @@ class Dumper(object):
     self.id2id           = {}
     
     self.collect(root_obj)
-    self.priorities_objs.sort(_priority_sorter)
+    self.priorities_objs.sort(key = cmp_to_key(_priority_sorter))
     self.objs.extend([o for (priority, o) in self.priorities_objs])
     
     s.write("cereal1\n%s\n" % len(self.objs))
@@ -356,13 +359,14 @@ class DictHandler(Handler):
   classname = "dict\n"
   def collect(self, obj, dumper):
     if Handler.collect(self, obj, dumper):
-      for i in obj.iterkeys  (): dumper.collect(i) # Collect is not ordered
-      for i in obj.itervalues(): dumper.collect(i)
+      for i in obj: dumper.collect(i) # Collect is not ordered
+      for i in obj: dumper.collect(obj[i])
       return 1
     
   def dump_data(self, obj, dumper, s):
     s.write("%s\n" % len(obj))
-    for k, v in obj.iteritems():
+    for k in obj:
+      v = obj[k]
       _HANDLERS_[v.__class__].dump_ref(v, dumper, s) # Value is saved fist
       _HANDLERS_[k.__class__].dump_ref(k, dumper, s)
       

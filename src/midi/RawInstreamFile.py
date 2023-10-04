@@ -28,7 +28,7 @@ class RawInstreamFile:
         copy them into memory.
         """
         if infile:
-            if type(infile) in [str, unicode]:
+            if type(infile) in [str]: #, unicode]:
                 infile = open(infile, 'rb')
                 self.data = infile.read()
                 infile.close()
