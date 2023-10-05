@@ -31,8 +31,15 @@
   |  0. Remarks                                                        |
  >>-------------------------------------------------------------------->>
 
-  Needed modules for python3:
-   PyOpenGL PyOpenGL_accelerate pygame, numpy, Pillow
+    This now works with python 3
+
+    needed modules:
+    PyOpenGL PyOpenGL_accelerate pygame, numpy, Pillow
+
+    In order for this to work on(my) modern ubuntu with wayland one has to remove this check:
+    https://github.com/mcfletch/pyopengl/blob/29b79e8966ba2930a5c44829b02dffc1ca600752/OpenGL/contextdata.py#L38
+
+    see also https://github.com/pygame/pygame/issues/3110
 
 
  >>-------------------------------------------------------------------->>
