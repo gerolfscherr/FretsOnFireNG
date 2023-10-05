@@ -513,6 +513,7 @@ class SongChooser(Layer, KeyListener):
       self.songLoader.cancel()
       # Don't start a new song loader until the previous one is finished
       if self.songLoader.is_alive():
+
         self.songCountdown = 256
         return
 
@@ -694,7 +695,7 @@ class SongChooser(Layer, KeyListener):
       font.render(self.prompt, (x, .05 - v))
 
       Theme.setSelectedColor(1 - v)
-      
+      ### index ouf of range
       item  = self.items[self.selectedIndex]
 
       if self.matchesSearch(item):

@@ -203,7 +203,7 @@ class Server(asyncore.dispatcher):
     self.handle_close()
 
   def handleClose(self):
-    for c in self.clients.values():
+    for c in list(self.clients.values()): ## prevent RuntimeError: dictionary changed size during iteration
       c.close()
 
   def handle_close(self):

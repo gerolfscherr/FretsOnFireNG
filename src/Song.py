@@ -87,7 +87,11 @@ class SongInfo(object):
 
         scores = self._get("scores", str, "")
         if scores:
-            scores = Cerealizer.loads(binascii.unhexlify(scores))
+            try:
+                scores = Cerealizer.loads(binascii.unhexlify(scores))
+            except Exception as e:
+                return
+
             for difficulty in scores.keys():
                 try:
                     difficulty = difficulties[difficulty]
@@ -98,6 +102,8 @@ class SongInfo(object):
                         self.addHighscore(difficulty, score, stars, name)
                     else:
                         Log.warn("Weak hack attempt detected. Better luck next time.")
+
+
 
     def _set(self, attr, value):
         if not self.info.has_section("song"):
@@ -808,13 +814,29 @@ class MidiInfoReader(midi.MidiOutStream):
             pass
 
 
+
+def get_file(engine, library, name, fn1, fn2, writable):
+    f = engine.resource.fileName(library, name, fn1, writable=writable)
+    if not os.path.isfile(f):
+        f = engine.resource.fileName(library, name, fn2, writable=writable)
+    return f
+
+
+
 def loadSong(engine, name, library=DEFAULT_LIBRARY, seekable=False, playbackOnly=False, notesOnly=False):
-    guitarFile = engine.resource.fileName(library, name, "guitar.ogg")
-    songFile = engine.resource.fileName(library, name, "song.ogg")
-    rhythmFile = engine.resource.fileName(library, name, "rhythm.ogg")
-    noteFile = engine.resource.fileName(library, name, "notes.mid", writable=True)
-    infoFile = engine.resource.fileName(library, name, "song.ini", writable=True)
-    scriptFile = engine.resource.fileName(library, name, "script.txt")
+
+#    guitarFile = engine.resource.fileName(library, name, "guitar.ogg")
+#    rhythmFile = engine.resource.fileName(library, name, "rhythm.ogg")
+#    noteFile = engine.resource.fileName(library, name, "notes.mid", writable=True)
+#    infoFile = engine.resource.fileName(library, name, "song.ini", writable=True)
+#    scriptFile = engine.resource.fileName(library, name, "script.txt")
+
+    guitarFile = get_file(engine, library, name, "guitar.ogg", "Guitar.ogg", False)
+    songFile = get_file(engine, library, name, "song.ogg", "Song.ogg", False)
+    rhythmFile = get_file(engine, library, name, "rythm.ogg", "Rythm.ogg", False)
+    noteFile = get_file(engine, library, name, "notes.mid", "Notes.mid", True)
+    infoFile = get_file(engine, library, name, "song.ini", "Song.ini", True)
+    scriptFile = get_file(engine, library, name, "script.txt", "Script.txt", False)
 
     if seekable:
         if os.path.isfile(guitarFile) and os.path.isfile(songFile):
@@ -918,12 +940,12 @@ def getAvailableSongs(engine, library=DEFAULT_LIBRARY, includeTutorials=False):
     names = []
     for songRoot in songRoots:
         for name in os.listdir(songRoot):
-            if not os.path.isfile(os.path.join(songRoot, name, "song.ini")) or name.startswith("."):
-                continue
-            if not name in names:
-                names.append(name)
+            if name.startswith("."): continue
+            for ini in ["song.ini", "Song.ini"]:
+                if os.path.isfile(os.path.join(songRoot, name, ini)):
+                    if not (name,ini) in names: names.append((name, ini))
 
-    songs = [SongInfo(engine.resource.fileName(library, name, "song.ini", writable=True)) for name in names]
+    songs = [SongInfo(engine.resource.fileName(library, name, ini, writable=True)) for name, ini in names]
     if not includeTutorials:
         songs = [song for song in songs if not song.tutorial]
     ##songs.sort(key=cmp_to_key(lambda a, b: cmp(a.name, b.name)))
